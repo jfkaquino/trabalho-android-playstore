@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Play Store</string>
+    <string name="title_activity_tela_conta">TelaConta</string>
 </resources>
