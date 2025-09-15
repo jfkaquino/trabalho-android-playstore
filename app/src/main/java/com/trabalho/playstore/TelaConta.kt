@@ -5,9 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,10 +18,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.ArrowDropDownCircle
+import androidx.compose.material.icons.outlined.CreditCard
+import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.LocalActivity
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Security
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -41,6 +55,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Preview
 @Composable
@@ -58,6 +73,7 @@ fun TelaConta() {
                 .fillMaxWidth()
                 .padding(innerPadding),
         ) {
+            Column() {
             Card(
                 modifier = Modifier
                     .padding(20.dp, 10.dp),
@@ -65,7 +81,6 @@ fun TelaConta() {
                     containerColor = Color.White
                 ),
             ) {
-                Column {
                     Row(
                         modifier = Modifier
                             .padding(10.dp)
@@ -130,9 +145,68 @@ fun TelaConta() {
                     Column {
                         MenuItem(
                             texto = "Gerenciar apps e dispositivos",
-                            icone = Icons.Rounded.Apps
+                            icone = Icons.Outlined.Apps
+                        )
+                        MenuItem(
+                            texto = "Notificações e ofertas",
+                            icone = Icons.Outlined.Notifications
+                        )
+                        MenuItem(
+                            texto = "Pagamentos e assinaturas",
+                            icone = Icons.Outlined.CreditCard
+                        )
+                        MenuItem(
+                            texto = "Play Protect",
+                            icone = Icons.Outlined.Security
+                        )
+                        MenuItem(
+                            texto = "Biblioteca",
+                            icone = Icons.Outlined.Folder
+                        )
+                        MenuItem(
+                            texto = "Play Pass",
+                            icone = Icons.Outlined.LocalActivity
+                        )
+                        MenuItem(
+                            texto = "Play Points",
+                            icone = Icons.Outlined.Star
+                        )
+                        MenuItem(
+                            texto = "Personalização no app Google Play",
+                            icone = Icons.Outlined.Tune
+                        )
+                        MenuItem(
+                            texto = "Configurações",
+                            icone = Icons.Outlined.Settings
+                        )
+                        MenuItem(
+                            texto = "Ajuda e feedback",
+                            icone = Icons.AutoMirrored.Outlined.HelpOutline
                         )
                     }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(bottom = 20.dp),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    Text(
+                        text = "Política de privacidade",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp),
+                        text = "•",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = "Termos de serviço",
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
             }
         }
