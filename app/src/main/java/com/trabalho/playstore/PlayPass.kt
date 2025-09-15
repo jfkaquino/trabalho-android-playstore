@@ -1,7 +1,9 @@
 package com.trabalho.playstore
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,10 +42,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.w3c.dom.Text
 
 @Preview
 @Composable
@@ -148,17 +152,17 @@ fun TelaPlayPass() {
                         modifier = Modifier
                         .horizontalScroll(rememberScrollState())
                     ){
-                        Ofertas()
+                        Ofertas(R.drawable.cod_banner, "Call of Duty", "50% de desconto em uma compra no app", "Call of Duty: Mobile - T 8")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.candy_banner, "Candy Crush", "Ganhe um Pacotinho Delicado", "Candy Crush Saga")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.ball_banner, "8 Ball Pool", "50% de desconto em uma compra no app", "8 Ball Pool")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.asphalt_banner, "Asphalt 9: Legends", "50% de desconto em uma compra no app", "Asphalt Legends - Corrida")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.freefire_banner, "Free Fire", "50% de desconto em uma compra no app", "Free Fire")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.eafc_banner, "EA SPORTS FC Mobile", "50% de desconto em uma compra no app", "EA SPORTS FC Mobile")
                     }
 
                     Spacer(modifier = Modifier.height(13.dp))
@@ -167,17 +171,17 @@ fun TelaPlayPass() {
                         modifier = Modifier
                             .horizontalScroll(rememberScrollState())
                     ){
-                        Ofertas()
+                        Ofertas(R.drawable.angry_banner, "Angry Birds", "50% de desconto em uma compra no app", "Angry Birds 2")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.monopoly_banner, "Monopoly", "50% de desconto em uma compra no app", "Monopoly GO!")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.roblox_banner, "Roblox", "80% de desconto em uma compra no app", "Roblox")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.disney_banner, "Disney", "50% de desconto em uma compra no app", "O Reino Mágico da Disney")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.lords_banner, "Lords Mobile", "Ganhe um pacote Brilhando Juntos", "Lords Mobile: Guerra de Reinos")
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas()
+                        Ofertas(R.drawable.guy_banner, "Stumble Guys", "50% de desconto em uma compra no app", "Stumble Guys")
                     }
                 }
 
@@ -190,6 +194,10 @@ fun TelaPlayPass() {
                 Spacer(modifier = Modifier.height(13.dp))
 
                 PerguntasFrequentes()
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                rodape()
             }
 
         }
@@ -251,11 +259,12 @@ fun barratopo() {
 
 }
 
-@Preview
 @Composable
-fun Ofertas() {
+fun Ofertas(@DrawableRes imageResId: Int, nomeOferta: String, texto: String, texto2: String) {
 
-    Column {
+    Column(
+        modifier = Modifier.width(150.dp)
+    ) {
 
         Card(
             colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
@@ -265,15 +274,22 @@ fun Ofertas() {
             border = BorderStroke(2.dp, Color.DarkGray)
         ) {
 
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = nomeOferta,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Fit
+            )
+
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text("Texto")
+        Text(texto)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text("Nome")
+        Text(texto2)
     }
 }
 
@@ -281,10 +297,9 @@ fun Ofertas() {
 @Composable
 fun PerguntasFrequentes(){
 
-    Box(
+    Column(
         modifier = Modifier
-            .width(300.dp)
-            .height(300.dp)
+            .fillMaxWidth()
             .padding(top = 16.dp)
             .padding(horizontal = 16.dp),
     ) {
@@ -302,7 +317,86 @@ fun PerguntasFrequentes(){
         Spacer(modifier = Modifier.height(10.dp))
 
         Text("O que tem no catálogo do Play Pass?")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth(),
+            thickness = 2.dp,
+            color = MaterialTheme.colorScheme.outline
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text("O que são as ofertas do Play Pass?")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth(),
+            thickness = 2.dp,
+            color = MaterialTheme.colorScheme.outline
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text("O que acontece com os jogos e apps que já tenho?")
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth(),
+            thickness = 2.dp,
+            color = MaterialTheme.colorScheme.outline
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text("Como o Compartilhamento em família funciona no Play Pass?")
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
-
-
 }
+
+@Preview
+@Composable
+fun rodape(){
+
+    Column {
+
+        Image(
+            painter = painterResource(id = R.drawable.icon_final),
+            contentDescription = "Banner Play Pass Final",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp),
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(modifier = Modifier.height(100.dp))
+
+        Text("Diversão para todos",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold)
+
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Text("O administrador da família pode compartilhar o acesso aos jogos e apps do Google Play Pass com até cinco membros. As ofertas mensais no jogo só serão disponíveis para administradores da família", textAlign = TextAlign.Center)
+
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Text("Saiba mais",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Blue,
+            fontWeight = FontWeight.SemiBold)
+
+    }
+}
+
