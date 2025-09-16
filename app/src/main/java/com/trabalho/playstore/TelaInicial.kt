@@ -42,10 +42,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
@@ -54,15 +50,15 @@ fun Inicial(navController: NavHostController) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { BarraTopo() },
-        bottomBar = { BarraInferior() }
+        topBar = { BarraTopo(navController) },
+        bottomBar = { BarraInferior(navController) }
 
     ) { innerPadding ->
-        Surface (
+        Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
-        ){
+        ) {
             Column {
 
                 Spacer(modifier = Modifier.height(5.dp))
@@ -88,7 +84,7 @@ fun Inicial(navController: NavHostController) {
                         .padding(horizontal = 16.dp),
                     border = BorderStroke(2.dp, Color.Black)
 
-                ) {  }
+                ) { }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -99,8 +95,16 @@ fun Inicial(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically
                 )
                 {
-                    Text("Patrocinados • ", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
-                    Text("Sugestões para você", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                    Text(
+                        "Patrocinados • ",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        "Sugestões para você",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
 
                     Spacer(modifier = Modifier.width(74.dp))
 
@@ -137,7 +141,10 @@ fun Inicial(navController: NavHostController) {
 
                         Spacer(modifier = Modifier.height(5.dp))
 
-                        Text("Google LLC • Ferramentas • Comunicação", style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            "Google LLC • Ferramentas • Comunicação",
+                            style = MaterialTheme.typography.bodySmall
+                        )
 
                         Spacer(modifier = Modifier.height(5.dp))
 
@@ -217,7 +224,10 @@ fun Inicial(navController: NavHostController) {
 
                         Spacer(modifier = Modifier.height(5.dp))
 
-                        Text("PicPay • Finanças • Carteiras digitais", style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            "PicPay • Finanças • Carteiras digitais",
+                            style = MaterialTheme.typography.bodySmall
+                        )
 
                         Spacer(modifier = Modifier.height(5.dp))
 
@@ -246,7 +256,7 @@ fun Inicial(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BarraTopo(){
+fun BarraTopo(navController: NavHostController) {
 
     TopAppBar(
         modifier = Modifier.padding(5.dp),
@@ -268,17 +278,21 @@ fun BarraTopo(){
                 modifier = Modifier.size(30.dp)
             )
 
-            Icon(
-                imageVector = Icons.Rounded.AccountCircle,
-                contentDescription = "",
-                modifier = Modifier.size(50.dp)
-            )
+            IconButton(
+                onClick = { navController.navigate("TelaConta") }
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.AccountCircle,
+                    contentDescription = "",
+                    modifier = Modifier.size(50.dp)
+                )
+            }
         }
     )
 }
 
 @Composable
-fun Aplicativo(color: Color, icon: ImageVector){
+fun Aplicativo(color: Color, icon: ImageVector) {
 
     Column {
 
@@ -309,7 +323,7 @@ fun Aplicativo(color: Color, icon: ImageVector){
 }
 
 @Composable
-fun TopoNavegacao(){
+fun TopoNavegacao() {
 
     Column(
         modifier = Modifier

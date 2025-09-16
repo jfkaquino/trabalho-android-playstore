@@ -23,7 +23,6 @@ import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.ArrowDropDownCircle
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.LocalActivity
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Security
@@ -31,9 +30,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -53,38 +50,32 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
-@Preview
 @Composable
-fun TelaConta() {
+fun TelaConta(navController: NavHostController) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 color = Color(0xFFF0F5F9)
             ),
-        topBar = { BarraSuperiorConta() },
+        topBar = { BarraSuperiorConta(navController) },
     ) { innerPadding ->
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding),
         ) {
-            Column() {
-            Card(
-                modifier = Modifier
-                    .padding(20.dp, 10.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White
-                ),
-            ) {
+            Column {
+                Card(
+                    modifier = Modifier
+                        .padding(20.dp, 10.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                ) {
                     Row(
                         modifier = Modifier
                             .padding(10.dp)
@@ -169,7 +160,8 @@ fun TelaConta() {
                         )
                         MenuItem(
                             texto = "Play Pass",
-                            icone = Icons.Outlined.LocalActivity
+                            icone = Icons.Outlined.LocalActivity,
+                            onClick = { navController.navigate("TelaPlayPass") }
                         )
                         MenuItem(
                             texto = "Play Points",
@@ -196,7 +188,7 @@ fun TelaConta() {
                         .padding(bottom = 20.dp),
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.Center
-                ){
+                ) {
                     Text(
                         text = "Política de privacidade",
                         style = MaterialTheme.typography.bodySmall
@@ -218,12 +210,14 @@ fun TelaConta() {
 }
 
 @Composable
-fun MenuItem(texto: String, icone: ImageVector) {
+fun MenuItem(texto: String, icone: ImageVector, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .clickable { },
+            .clickable {
+                onClick()
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -243,12 +237,14 @@ fun MenuItem(texto: String, icone: ImageVector) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BarraSuperiorConta() {
+private fun BarraSuperiorConta(navController: NavHostController) {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(5.dp),
         navigationIcon = {
             IconButton(
-                onClick = {},
+                onClick = {
+                    navController.navigateUp()
+                },
                 modifier = Modifier
                     .size(30.dp)
             ) {

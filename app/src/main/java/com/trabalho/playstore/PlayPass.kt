@@ -3,9 +3,7 @@ package com.trabalho.playstore
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,14 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,21 +36,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import org.w3c.dom.Text
+import androidx.navigation.NavHostController
 
-@Preview
 @Composable
-fun TelaPlayPass() {
+fun TelaPlayPass(navController: NavHostController) {
 
     Scaffold(
-        topBar = { barratopo() }
+        topBar = { barratopo(navController) }
     ) { innerPadding ->
 
         Surface(
@@ -68,7 +61,7 @@ fun TelaPlayPass() {
                     .fillMaxSize()
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
-            ){
+            ) {
 
                 Image(
                     painter = painterResource(id = R.drawable.playpass_banner),
@@ -90,9 +83,9 @@ fun TelaPlayPass() {
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                Row{
+                Row {
 
-                Text("Por apenas")
+                    Text("Por apenas")
                     Spacer(modifier = Modifier.width(4.dp))
                     Text("R$ 9,90/mês", fontWeight = FontWeight.SemiBold)
                 }
@@ -127,22 +120,28 @@ fun TelaPlayPass() {
                 Row {
                     Text("Economize 24% com uma", style = MaterialTheme.typography.bodySmall)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Assinatura anual de R$ 89,99/ano",
+                    Text(
+                        "Assinatura anual de R$ 89,99/ano",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Blue,
                         textDecoration = TextDecoration.Underline,
-                        fontWeight = FontWeight.SemiBold)
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(30.dp))
 
-                Text("Ofertas disponíveis",
+                Text(
+                    "Ofertas disponíveis",
                     fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyLarge)
+                    style = MaterialTheme.typography.bodyLarge
+                )
 
-                Text("Aproveite ofertas dos principais jogos com o Play Pass",
+                Text(
+                    "Aproveite ofertas dos principais jogos com o Play Pass",
                     style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Medium)
+                    fontWeight = FontWeight.Medium
+                )
 
                 Spacer(modifier = Modifier.height(13.dp))
 
@@ -150,19 +149,49 @@ fun TelaPlayPass() {
 
                     Row(
                         modifier = Modifier
-                        .horizontalScroll(rememberScrollState())
-                    ){
-                        Ofertas(R.drawable.cod_banner, "Call of Duty", "50% de desconto em uma compra no app", "Call of Duty: Mobile - T 8")
+                            .horizontalScroll(rememberScrollState())
+                    ) {
+                        Ofertas(
+                            R.drawable.cod_banner,
+                            "Call of Duty",
+                            "50% de desconto em uma compra no app",
+                            "Call of Duty: Mobile - T 8"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.candy_banner, "Candy Crush", "Ganhe um Pacotinho Delicado", "Candy Crush Saga")
+                        Ofertas(
+                            R.drawable.candy_banner,
+                            "Candy Crush",
+                            "Ganhe um Pacotinho Delicado",
+                            "Candy Crush Saga"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.ball_banner, "8 Ball Pool", "50% de desconto em uma compra no app", "8 Ball Pool")
+                        Ofertas(
+                            R.drawable.ball_banner,
+                            "8 Ball Pool",
+                            "50% de desconto em uma compra no app",
+                            "8 Ball Pool"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.asphalt_banner, "Asphalt 9: Legends", "50% de desconto em uma compra no app", "Asphalt Legends - Corrida")
+                        Ofertas(
+                            R.drawable.asphalt_banner,
+                            "Asphalt 9: Legends",
+                            "50% de desconto em uma compra no app",
+                            "Asphalt Legends - Corrida"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.freefire_banner, "Free Fire", "50% de desconto em uma compra no app", "Free Fire")
+                        Ofertas(
+                            R.drawable.freefire_banner,
+                            "Free Fire",
+                            "50% de desconto em uma compra no app",
+                            "Free Fire"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.eafc_banner, "EA SPORTS FC Mobile", "50% de desconto em uma compra no app", "EA SPORTS FC Mobile")
+                        Ofertas(
+                            R.drawable.eafc_banner,
+                            "EA SPORTS FC Mobile",
+                            "50% de desconto em uma compra no app",
+                            "EA SPORTS FC Mobile"
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(13.dp))
@@ -170,26 +199,58 @@ fun TelaPlayPass() {
                     Row(
                         modifier = Modifier
                             .horizontalScroll(rememberScrollState())
-                    ){
-                        Ofertas(R.drawable.angry_banner, "Angry Birds", "50% de desconto em uma compra no app", "Angry Birds 2")
+                    ) {
+                        Ofertas(
+                            R.drawable.angry_banner,
+                            "Angry Birds",
+                            "50% de desconto em uma compra no app",
+                            "Angry Birds 2"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.monopoly_banner, "Monopoly", "50% de desconto em uma compra no app", "Monopoly GO!")
+                        Ofertas(
+                            R.drawable.monopoly_banner,
+                            "Monopoly",
+                            "50% de desconto em uma compra no app",
+                            "Monopoly GO!"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.roblox_banner, "Roblox", "80% de desconto em uma compra no app", "Roblox")
+                        Ofertas(
+                            R.drawable.roblox_banner,
+                            "Roblox",
+                            "80% de desconto em uma compra no app",
+                            "Roblox"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.disney_banner, "Disney", "50% de desconto em uma compra no app", "O Reino Mágico da Disney")
+                        Ofertas(
+                            R.drawable.disney_banner,
+                            "Disney",
+                            "50% de desconto em uma compra no app",
+                            "O Reino Mágico da Disney"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.lords_banner, "Lords Mobile", "Ganhe um pacote Brilhando Juntos", "Lords Mobile: Guerra de Reinos")
+                        Ofertas(
+                            R.drawable.lords_banner,
+                            "Lords Mobile",
+                            "Ganhe um pacote Brilhando Juntos",
+                            "Lords Mobile: Guerra de Reinos"
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Ofertas(R.drawable.guy_banner, "Stumble Guys", "50% de desconto em uma compra no app", "Stumble Guys")
+                        Ofertas(
+                            R.drawable.guy_banner,
+                            "Stumble Guys",
+                            "50% de desconto em uma compra no app",
+                            "Stumble Guys"
+                        )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(50.dp))
 
-                Text("Perguntas frequentes",
+                Text(
+                    "Perguntas frequentes",
                     style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold)
+                    fontWeight = FontWeight.Bold
+                )
 
                 Spacer(modifier = Modifier.height(13.dp))
 
@@ -217,10 +278,11 @@ fun MinhaImagemLocal() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun barratopo() {
+fun barratopo(navController: NavHostController) {
 
     TopAppBar(
-        title = { ("")
+        title = {
+            ("")
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -244,7 +306,9 @@ fun barratopo() {
         },
         navigationIcon = {
             IconButton(
-                onClick = { },
+                onClick = {
+                    navController.navigateUp()
+                },
                 modifier = Modifier
                     .size(30.dp)
             ) {
@@ -295,7 +359,7 @@ fun Ofertas(@DrawableRes imageResId: Int, nomeOferta: String, texto: String, tex
 
 @Preview
 @Composable
-fun PerguntasFrequentes(){
+fun PerguntasFrequentes() {
 
     Column(
         modifier = Modifier
@@ -363,7 +427,7 @@ fun PerguntasFrequentes(){
 
 @Preview
 @Composable
-fun rodape(){
+fun rodape() {
 
     Column {
 
@@ -378,24 +442,31 @@ fun rodape(){
 
         Spacer(modifier = Modifier.height(100.dp))
 
-        Text("Diversão para todos",
+        Text(
+            "Diversão para todos",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold
+        )
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        Text("O administrador da família pode compartilhar o acesso aos jogos e apps do Google Play Pass com até cinco membros. As ofertas mensais no jogo só serão disponíveis para administradores da família", textAlign = TextAlign.Center)
+        Text(
+            "O administrador da família pode compartilhar o acesso aos jogos e apps do Google Play Pass com até cinco membros. As ofertas mensais no jogo só serão disponíveis para administradores da família",
+            textAlign = TextAlign.Center
+        )
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        Text("Saiba mais",
+        Text(
+            "Saiba mais",
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall,
             color = Color.Blue,
-            fontWeight = FontWeight.SemiBold)
+            fontWeight = FontWeight.SemiBold
+        )
 
     }
 }

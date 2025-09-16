@@ -30,15 +30,18 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BarraSuperior() {
+fun BarraSuperior(navController: NavController) {
     TopAppBar(
         modifier = Modifier.padding(5.dp),
         navigationIcon = {
             IconButton(
-                onClick = {},
+                onClick = {
+                    navController.navigateUp()
+                },
                 modifier = Modifier
                     .size(30.dp)
             ) {
@@ -69,16 +72,20 @@ fun BarraSuperior() {
 }
 
 @Composable
-fun BarraInferior() {
-    BottomAppBar{
+fun BarraInferior(navController: NavController) {
+    BottomAppBar {
         Row(
             Modifier
                 .fillMaxWidth()
                 .padding(20.dp, 0.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             BarraInferiorBotao("Jogos", Icons.Outlined.SportsEsports)
-            BarraInferiorBotao("Apps", Icons.Outlined.GridView)
+            BarraInferiorBotao(
+                "Apps",
+                Icons.Outlined.GridView,
+                { navController.navigate("TelaInicial") })
             BarraInferiorBotao("Pesquisa", Icons.Outlined.Search)
             BarraInferiorBotao("Livros", Icons.Outlined.Book)
         }
@@ -86,12 +93,18 @@ fun BarraInferior() {
 }
 
 @Composable
-private fun BarraInferiorBotao(Texto: String, Icone: ImageVector) {
+private fun BarraInferiorBotao(
+    Texto: String,
+    Icone: ImageVector,
+    onClick: () -> Unit = {}
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         IconButton(
-            onClick = {},
+            onClick = {
+                onClick()
+            },
             modifier = Modifier
                 .size(30.dp)
         ) {

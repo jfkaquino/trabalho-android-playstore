@@ -1,7 +1,5 @@
 package com.trabalho.playstore
 
-import android.media.Image
-import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,29 +19,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.outlined.Book
-import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.SportsEsports
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.GetApp
-import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Phone
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,22 +42,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.w3c.dom.Text
+import androidx.navigation.NavHostController
 
 
 @OptIn(ExperimentalLayoutApi::class)
-@Preview
 @Composable
-fun TelaInstalar() {
+fun TelaInstalar(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { BarraSuperior() },
-        bottomBar = { BarraInferior() },
+        topBar = { BarraSuperior(navController) },
+        bottomBar = { BarraInferior(navController) },
     ) { innerPadding ->
         Surface(
             modifier = Modifier
@@ -123,7 +107,7 @@ fun TelaInstalar() {
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
-                        ){
+                        ) {
                             Text(
                                 "4,5",
                                 textAlign = TextAlign.Center,
@@ -225,7 +209,7 @@ fun TelaInstalar() {
                         .fillMaxWidth()
                         .padding(horizontal = 15.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Text(
                         "Sobre este app",
                         style = MaterialTheme.typography.bodyLarge,
@@ -269,7 +253,7 @@ fun TelaInstalar() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 15.dp),
-                ){
+                ) {
                     Text(
                         "Avaliação do app",
                         style = MaterialTheme.typography.bodyLarge,
@@ -285,7 +269,7 @@ fun TelaInstalar() {
                             .padding(vertical = 8.dp)
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
-                    ){
+                    ) {
                         Nota()
                         Nota()
                         Nota()
@@ -304,7 +288,6 @@ fun TelaInstalar() {
 }
 
 
-
 @Composable
 fun CapturaDeTela() {
     Surface(
@@ -313,7 +296,7 @@ fun CapturaDeTela() {
             .height(170.dp),
         color = Color.LightGray,
         shape = RoundedCornerShape(10.dp)
-    ){}
+    ) {}
 }
 
 @Composable

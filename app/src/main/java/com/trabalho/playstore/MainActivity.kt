@@ -17,7 +17,9 @@ class MainActivity : ComponentActivity() {
 
             NavHost(navController = navController, startDestination = "TelaInicial") {
                 composable("TelaInicial") { Inicial(navController) }
-                composable("TelaInstalar") { TelaInstalar() }
+                composable("TelaInstalar") { TelaInstalar(navController) }
+                composable("TelaConta") { TelaConta(navController) }
+                composable("TelaPlayPass") { TelaPlayPass(navController) }
             }
         }
     }
