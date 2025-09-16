@@ -218,7 +218,7 @@ fun MenuItem(texto: String, icone: ImageVector) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(45.dp)
+            .height(48.dp)
             .clickable { },
         verticalAlignment = Alignment.CenterVertically
     ) {
