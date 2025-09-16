@@ -1,5 +1,7 @@
 package com.trabalho.playstore
 
+import android.media.Image
+import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowOverflow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
@@ -23,6 +28,8 @@ import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SportsEsports
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.GetApp
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Phone
@@ -32,6 +39,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -39,14 +47,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.w3c.dom.Text
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -67,6 +81,7 @@ fun TelaInstalar() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp, vertical = 10.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Row {
                     Surface(
@@ -106,12 +121,24 @@ fun TelaInstalar() {
                             .weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            "4,5",
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.labelSmall
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Text(
+                                "4,5",
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                            Icon(
+                                modifier = Modifier
+                                    .size(15.dp),
+                                imageVector = Icons.Outlined.Star,
+                                contentDescription = "Avaliação",
+                                tint = Color.Blue
+                            )
+                        }
+
                         Text(
                             "40 mi\navaliações",
                             textAlign = TextAlign.Center,
@@ -224,7 +251,7 @@ fun TelaInstalar() {
                         .padding(15.dp, 0.dp),
                     style = MaterialTheme.typography.bodyMedium
                 )
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 FlowRow(
                     Modifier
                         .height(70.dp)
@@ -237,152 +264,46 @@ fun TelaInstalar() {
                     Etiqueta("Apps de chamadas")
                     Etiqueta("Android Auto")
                 }
+                Spacer(modifier = Modifier.height(20.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                ){
+                    Text(
+                        "Avaliação do app",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        "Dê sua opinião",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.DarkGray,
+                    )
+                    Row(
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ){
+                        Nota()
+                        Nota()
+                        Nota()
+                        Nota()
+                        Nota()
+                    }
+                    Text(
+                        "Escreva uma resenha",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Blue
+                    )
+                }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun BarraSuperior() {
-    TopAppBar(
-        modifier = Modifier.padding(5.dp),
-        navigationIcon = {
-            IconButton(
-                onClick = {},
-                modifier = Modifier
-                    .size(30.dp)
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                    contentDescription = "",
-                )
-            }
-        },
-        title = { Text("") },
-        actions = {
-            IconButton(
-                onClick = {},
-                modifier = Modifier
-                    .size(30.dp)
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    imageVector = Icons.Rounded.MoreVert,
-                    contentDescription = "",
-                )
-            }
-        }
-    )
-}
 
-@Composable
-fun BarraInferior() {
-    BottomAppBar{
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(20.dp, 0.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier
-                        .size(30.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        imageVector = Icons.Outlined.SportsEsports,
-                        contentDescription = "",
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    "Jogos",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier
-                        .size(30.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        imageVector = Icons.Outlined.GridView,
-                        contentDescription = "",
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    "Apps",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier
-                        .size(30.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        imageVector = Icons.Outlined.Search,
-                        contentDescription = "",
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    "Pesquisa",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier
-                        .size(30.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        imageVector = Icons.Outlined.Book,
-                        contentDescription = "",
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    "Livros",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
-}
 
 @Composable
 fun CapturaDeTela() {
@@ -404,4 +325,20 @@ private fun Etiqueta(texto: String) {
             .padding(8.dp, 5.dp),
         style = MaterialTheme.typography.bodyMedium
     )
+}
+
+@Composable
+private fun Nota() {
+    var clicado by remember { mutableStateOf(false) }
+    IconButton(
+        onClick = { clicado = !clicado }
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(60.dp),
+            imageVector = if (clicado) Icons.Outlined.Star else Icons.Outlined.StarOutline,
+            contentDescription = "Avaliação",
+            tint = if (clicado) Color.Blue else Color.Gray
+        )
+    }
 }

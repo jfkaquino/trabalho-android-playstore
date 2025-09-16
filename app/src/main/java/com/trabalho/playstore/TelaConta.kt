@@ -55,6 +55,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Preview
@@ -66,7 +70,7 @@ fun TelaConta() {
             .background(
                 color = Color(0xFFF0F5F9)
             ),
-        topBar = { BarraSuperior() },
+        topBar = { BarraSuperiorConta() },
     ) { innerPadding ->
         Surface(
             modifier = Modifier
@@ -239,7 +243,7 @@ fun MenuItem(texto: String, icone: ImageVector) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BarraSuperior() {
+private fun BarraSuperiorConta() {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(5.dp),
         navigationIcon = {
