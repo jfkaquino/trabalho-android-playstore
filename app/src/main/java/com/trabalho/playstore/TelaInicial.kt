@@ -1,6 +1,5 @@
 package com.trabalho.playstore
 
-import android.content.ClipData.Item
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -23,10 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Notifications
-import androidx.compose.material.icons.rounded.Phone
-import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,25 +39,47 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-data class AppItem(val nome: String, val descricao: String, val avaliacao: String, val tamanho: String, val cor: Color, val imageResId: Int, val nomeOferta: String, val onClick: () -> Unit = {})
-
-val listaApps = listOf(
-    AppItem("Telefone", "Google LLC • Ferramentas • Comunicação", "4,6", "12 MB", Color.Blue, R.drawable.telefone_icone, "Telefone", {navController.navigate("TelaInstalar") }),
-    AppItem("SHEIN-COMPRAS Online", "Compras • Lojas", "4,1", "27 MB", Color.Black, R.drawable.shein, "Shein"),
-    AppItem("PicPay: Conta, Cartão e Pix", "PicPay • Finanças • Carteiras digitais", "4,7", "156 MB", Color.Green, R.drawable.picpay, "Picpay")
-)
+data class AppItem(val nome: String, val descricao: String, val avaliacao: String, val tamanho: String, val cor: Color, val imageResId: Int, val nomeOferta: String, val rotaNavegacao: String? = null)
 
 @Composable
 fun Inicial(navController: NavHostController) {
 
-
+    val listaApps = listOf(
+        AppItem(
+            "Telefone",
+            "Google LLC • Ferramentas • Comunicação",
+            "4,6",
+            "12 MB",
+            Color.Blue,
+            R.drawable.telefone_icone,
+            "Telefone",
+            rotaNavegacao = "TelaInstalar"
+        ),
+        AppItem(
+            "SHEIN-COMPRAS Online",
+            "Compras • Lojas",
+            "4,1",
+            "27 MB",
+            Color.Black,
+            R.drawable.shein,
+            "Shein"
+        ),
+        AppItem(
+            "PicPay: Conta, Cartão e Pix",
+            "PicPay • Finanças • Carteiras digitais",
+            "4,7",
+            "156 MB",
+            Color.Green,
+            R.drawable.picpay,
+            "Picpay"
+        )
+    )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -93,7 +111,7 @@ fun Inicial(navController: NavHostController) {
 
                 Card(
                     colors = CardDefaults.cardColors(Color.Cyan),
-                      modifier = Modifier
+                    modifier = Modifier
                         .height(250.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -145,21 +163,32 @@ fun Inicial(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                LazyColumn {
+                LazyColumn(
+                    userScrollEnabled = false
+                ) {
                     items(listaApps) { app ->
 
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .clickable {
-
-                                    navController.navigate("TelaInstalar")
-                                },
+                                .padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
-                        )
-                        {
-                            Aplicativo(app.cor, app.imageResId, app.nomeOferta)
+                        ) {
+                            val appTel =
+                                if (app.rotaNavegacao != null) {
+                                    Modifier.clickable {
+                                        navController.navigate(app.rotaNavegacao)
+                                    }
+                                } else {
+                                    Modifier
+                                }
+
+                            Aplicativo(
+                                color = app.cor,
+                                imageResId = app.imageResId,
+                                nomeOferta = app.nomeOferta,
+                                modifier = appTel
+                            )
                             Spacer(modifier = Modifier.width(20.dp))
 
                             Column {
@@ -200,10 +229,6 @@ fun Inicial(navController: NavHostController) {
     }
 }
 
-
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BarraTopo(navController: NavHostController) {
@@ -242,13 +267,13 @@ fun BarraTopo(navController: NavHostController) {
 }
 
 @Composable
-fun Aplicativo(color: Color, @DrawableRes imageResId: Int, nomeOferta: String) {
+fun Aplicativo(color: Color, @DrawableRes imageResId: Int, nomeOferta: String, modifier: Modifier = Modifier) {
 
     Column {
 
         Card(
             colors = CardDefaults.cardColors(containerColor = color),
-            modifier = Modifier
+            modifier = modifier
                 .height(70.dp)
                 .width(70.dp),
             shape = RoundedCornerShape(10.dp)
