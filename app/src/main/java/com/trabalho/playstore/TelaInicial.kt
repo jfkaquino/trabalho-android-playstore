@@ -1,5 +1,6 @@
 package com.trabalho.playstore
 
+import android.content.ClipData.Item
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -47,16 +50,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-data class AppItem(val nome: String, val descricao: String, val avaliacao: String, val tamanho: String, val cor: Color, val icone: ImageVector)
+data class AppItem(val nome: String, val descricao: String, val avaliacao: String, val tamanho: String, val cor: Color, val imageResId: Int, val nomeOferta: String, val onClick: () -> Unit = {})
 
 val listaApps = listOf(
-    AppItem("Telefone", "Google LLC • Ferramentas • Comunicação", "4,6", "12 MB", Color.Blue, Icons.Rounded.Phone),
-    AppItem("SHEIN-COMPRAS Online", "Compras • Lojas", "4,1", "27 MB", Color.Black, Icons.Rounded.ShoppingCart),
-    AppItem("PicPay: Conta, Cartão e Pix", "PicPay • Finanças • Carteiras digitais", "4,7", "156 MB", Color.Green, Icons.Rounded.AttachMoney)
+    AppItem("Telefone", "Google LLC • Ferramentas • Comunicação", "4,6", "12 MB", Color.Blue, R.drawable.telefone_icone, "Telefone", {navController.navigate("TelaInstalar") }),
+    AppItem("SHEIN-COMPRAS Online", "Compras • Lojas", "4,1", "27 MB", Color.Black, R.drawable.shein, "Shein"),
+    AppItem("PicPay: Conta, Cartão e Pix", "PicPay • Finanças • Carteiras digitais", "4,7", "156 MB", Color.Green, R.drawable.picpay, "Picpay")
 )
 
 @Composable
 fun Inicial(navController: NavHostController) {
+
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -140,137 +145,64 @@ fun Inicial(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clickable {
+                LazyColumn {
+                    items(listaApps) { app ->
 
-                            navController.navigate("TelaInstalar")
-                        },
-                    verticalAlignment = Alignment.CenterVertically
-                )
-                {
-                    Aplicativo(Color.Blue, R.drawable.telefone_icone, "Telefone")
-                    Spacer(modifier = Modifier.width(20.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .clickable {
 
-                    Column {
-                        Text("Telefone")
-
-                        Spacer(modifier = Modifier.height(5.dp))
-
-                        Text(
-                            "Google LLC • Ferramentas • Comunicação",
-                            style = MaterialTheme.typography.bodySmall
+                                    navController.navigate("TelaInstalar")
+                                },
+                            verticalAlignment = Alignment.CenterVertically
                         )
+                        {
+                            Aplicativo(app.cor, app.imageResId, app.nomeOferta)
+                            Spacer(modifier = Modifier.width(20.dp))
 
-                        Spacer(modifier = Modifier.height(5.dp))
+                            Column {
+                                Text(app.nome)
 
-                        Row {
-                            Text("4,6", style = MaterialTheme.typography.bodySmall)
+                                Spacer(modifier = Modifier.height(5.dp))
 
-                            Spacer(modifier = Modifier.width(2.dp))
+                                Text(
+                                    app.descricao,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
 
-                            Icon(
-                                imageVector = Icons.Rounded.Star,
-                                contentDescription = "",
-                                modifier = Modifier.size(14.dp),
-                                tint = Color.Black
-                            )
+                                Spacer(modifier = Modifier.height(5.dp))
 
-                            Spacer(modifier = Modifier.width(10.dp))
+                                Row {
+                                    Text(app.avaliacao, style = MaterialTheme.typography.bodySmall)
 
-                            Text("12 MB")
+                                    Spacer(modifier = Modifier.width(2.dp))
+
+                                    Icon(
+                                        imageVector = Icons.Rounded.Star,
+                                        contentDescription = "Avaliação",
+                                        modifier = Modifier.size(14.dp),
+                                        tint = Color.Black
+                                    )
+
+                                    Spacer(modifier = Modifier.width(10.dp))
+
+                                    Text(app.tamanho)
+                                }
+                            }
                         }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Aplicativo(Color.Black, R.drawable.shein, "SHEIN")
-
-                    Spacer(modifier = Modifier.width(20.dp))
-
-                    Column {
-                        Text("SHEIN-COMPRAS Online")
-
-                        Spacer(modifier = Modifier.height(5.dp))
-
-                        Text("Compras • Lojas", style = MaterialTheme.typography.bodySmall)
-
-                        Spacer(modifier = Modifier.height(5.dp))
-
-                        Row {
-                            Text("4,1", style = MaterialTheme.typography.bodySmall)
-
-                            Spacer(modifier = Modifier.width(2.dp))
-
-                            Icon(
-                                imageVector = Icons.Rounded.Star,
-                                contentDescription = "",
-                                modifier = Modifier.size(14.dp),
-                                tint = Color.Black
-                            )
-
-                            Spacer(modifier = Modifier.width(10.dp))
-
-                            Text("27 MB")
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Aplicativo(Color.Green, R.drawable.picpay, "PicPay")
-
-                    Spacer(modifier = Modifier.width(20.dp))
-
-                    Column {
-                        Text("PicPay: Conta, Cartão e Pix")
-
-                        Spacer(modifier = Modifier.height(5.dp))
-
-                        Text(
-                            "PicPay • Finanças • Carteiras digitais",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-
-                        Spacer(modifier = Modifier.height(5.dp))
-
-                        Row {
-                            Text("4,7", style = MaterialTheme.typography.bodySmall)
-
-                            Spacer(modifier = Modifier.width(2.dp))
-
-                            Icon(
-                                imageVector = Icons.Rounded.Star,
-                                contentDescription = "",
-                                modifier = Modifier.size(14.dp),
-                                tint = Color.Black
-                            )
-
-                            Spacer(modifier = Modifier.width(10.dp))
-
-                            Text("156 MB")
-                        }
+                        Spacer(modifier = Modifier.height(30.dp))
                     }
                 }
             }
         }
     }
 }
+
+
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
