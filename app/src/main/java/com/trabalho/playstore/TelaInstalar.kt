@@ -2,14 +2,12 @@ package com.trabalho.playstore
 
 import android.widget.Toast
 import androidx.annotation.DrawableRes
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +27,6 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.GetApp
-import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
@@ -39,12 +36,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -60,8 +57,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TelaInstalar(navController: NavHostController) {
     Scaffold(
@@ -285,20 +280,26 @@ fun TelaInstalar(navController: NavHostController) {
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Nota()
-                        Nota()
-                        Nota()
-                        Nota()
-                        Nota()
+                        var currentRating by remember { mutableIntStateOf(0) }
+                        for (starIndex in 1..5) {
+                            NotaEstrela(
+                                starIndex = starIndex,
+                                currentRating = currentRating,
+                                onStarClicked = { clickedStarIndex ->
+                                    currentRating = clickedStarIndex
+                                }
+                            )
+                        }
                     }
                     var text by remember { mutableStateOf("") }
+                    val context = LocalContext.current
                     TextField(
                         value = text,
                         onValueChange = { text = it },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(
-                            onDone = { MostrarResenha(text) }
-                        ),
+                        keyboardActions = KeyboardActions(onDone = {
+                            Toast.makeText(context, "Obrigado pela resenha!\n$text", Toast.LENGTH_LONG).show()
+                        }),
                         label = { Text("Escreva uma resenha") },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -351,17 +352,21 @@ private fun Etiqueta(texto: String) {
 }
 
 @Composable
-private fun Nota() {
-    var clicado by remember { mutableStateOf(false) }
+private fun NotaEstrela(
+    starIndex: Int,
+    currentRating: Int,
+    onStarClicked: (Int) -> Unit
+) {
+    val isFilled = starIndex <= currentRating
+
     IconButton(
-        onClick = { clicado = !clicado }
+        onClick = { onStarClicked(starIndex) }
     ) {
         Icon(
-            modifier = Modifier
-                .size(60.dp),
-            imageVector = if (clicado) Icons.Outlined.Star else Icons.Outlined.StarOutline,
-            contentDescription = "Avaliação",
-            tint = if (clicado) Color.Blue else Color.Gray
+            modifier = Modifier.size(60.dp),
+            imageVector = if (isFilled) Icons.Outlined.Star else Icons.Outlined.StarOutline,
+            contentDescription = "Avaliação $starIndex",
+            tint = if (isFilled) Color.Blue else Color.Gray
         )
     }
 }
