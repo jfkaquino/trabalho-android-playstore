@@ -1,8 +1,10 @@
 package com.trabalho.playstore
 
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -50,6 +52,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -83,10 +87,12 @@ fun TelaInstalar(navController: NavHostController) {
                         color = Color.Blue,
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Phone,
-                            contentDescription = "",
-                            tint = Color.White
+                        Image(
+                            painter = painterResource(id = R.drawable.telefone_icone),
+                            contentDescription = "Play Pass Banner",
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentScale = ContentScale.Crop
                         )
                     }
                     Spacer(modifier = Modifier.width(20.dp))
@@ -209,9 +215,9 @@ fun TelaInstalar(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 ) {
-                    CapturaDeTela()
-                    CapturaDeTela()
-                    CapturaDeTela()
+                    CapturaDeTela(R.drawable.tel_um, "Tela1")
+                    CapturaDeTela(R.drawable.tel_seis,"Tela6")
+                    CapturaDeTela(R.drawable.tel_sete,"Tela7")
                 }
                 Row(
                     modifier = Modifier
@@ -316,14 +322,21 @@ fun TelaInstalar(navController: NavHostController) {
 }
 
 @Composable
-fun CapturaDeTela() {
+fun CapturaDeTela(@DrawableRes imageResId: Int, nomeOferta: String) {
     Surface(
         modifier = Modifier
             .width(100.dp)
             .height(170.dp),
         color = Color.LightGray,
         shape = RoundedCornerShape(10.dp)
-    ) {}
+    ) {
+        Image(
+            painter = painterResource(id = imageResId),
+            contentDescription = nomeOferta,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Fit
+        )
+    }
 }
 
 @Composable

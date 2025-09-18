@@ -65,7 +65,7 @@ fun TelaPlayPass(navController: NavHostController) {
 
                 Image(
                     painter = painterResource(id = R.drawable.playpass_banner),
-                    contentDescription = "Minha imagem",
+                    contentDescription = "Play Pass Banner",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp),

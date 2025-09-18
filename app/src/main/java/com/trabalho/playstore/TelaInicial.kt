@@ -1,8 +1,10 @@
 package com.trabalho.playstore
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -44,6 +47,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+
+data class AppItem(val nome: String, val descricao: String, val avaliacao: String, val tamanho: String, val cor: Color, val icone: ImageVector)
+
+val listaApps = listOf(
+    AppItem("Telefone", "Google LLC • Ferramentas • Comunicação", "4,6", "12 MB", Color.Blue, Icons.Rounded.Phone),
+    AppItem("SHEIN-COMPRAS Online", "Compras • Lojas", "4,1", "27 MB", Color.Black, Icons.Rounded.ShoppingCart),
+    AppItem("PicPay: Conta, Cartão e Pix", "PicPay • Finanças • Carteiras digitais", "4,7", "156 MB", Color.Green, Icons.Rounded.AttachMoney)
+)
 
 @Composable
 fun Inicial(navController: NavHostController) {
@@ -78,13 +89,21 @@ fun Inicial(navController: NavHostController) {
 
                 Card(
                     colors = CardDefaults.cardColors(Color.Cyan),
-                    modifier = Modifier
+                      modifier = Modifier
                         .height(250.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    border = BorderStroke(2.dp, Color.Black)
+                    border = BorderStroke(2.dp, Color.White)
 
-                ) { }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.banner1),
+                        contentDescription = "Play Pass Banner",
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -133,7 +152,7 @@ fun Inicial(navController: NavHostController) {
                     verticalAlignment = Alignment.CenterVertically
                 )
                 {
-                    Aplicativo(Color.Blue, icon = Icons.Rounded.Phone)
+                    Aplicativo(Color.Blue, R.drawable.telefone_icone, "Telefone")
                     Spacer(modifier = Modifier.width(20.dp))
 
                     Column {
@@ -175,7 +194,7 @@ fun Inicial(navController: NavHostController) {
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Aplicativo(Color.Black, icon = Icons.Rounded.ShoppingCart)
+                    Aplicativo(Color.Black, R.drawable.shein, "SHEIN")
 
                     Spacer(modifier = Modifier.width(20.dp))
 
@@ -215,7 +234,7 @@ fun Inicial(navController: NavHostController) {
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Aplicativo(Color.Green, icon = Icons.Rounded.AttachMoney)
+                    Aplicativo(Color.Green, R.drawable.picpay, "PicPay")
 
                     Spacer(modifier = Modifier.width(20.dp))
 
@@ -292,7 +311,7 @@ fun BarraTopo(navController: NavHostController) {
 }
 
 @Composable
-fun Aplicativo(color: Color, icon: ImageVector) {
+fun Aplicativo(color: Color, @DrawableRes imageResId: Int, nomeOferta: String) {
 
     Column {
 
@@ -301,25 +320,17 @@ fun Aplicativo(color: Color, icon: ImageVector) {
             modifier = Modifier
                 .height(70.dp)
                 .width(70.dp),
-            border = BorderStroke(2.dp, Color.Black)
+            shape = RoundedCornerShape(10.dp)
         ) {
 
-            Box(
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = nomeOferta,
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = "Ícone do aplicativo",
-                    tint = Color.White,
-                    modifier = Modifier.size(30.dp)
-                )
-            }
-
+                contentScale = ContentScale.Fit
+            )
         }
     }
-
-
 }
 
 @Composable
@@ -340,8 +351,9 @@ fun TopoNavegacao() {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(horizontal = 16.dp)
+                    .horizontalScroll(rememberScrollState()),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     "Para você",
