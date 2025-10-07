@@ -1,4 +1,4 @@
-package com.trabalho.playstore
+package com.trabalho.playstore.dao
 
 import androidx.room.Dao
 import androidx.room.Delete

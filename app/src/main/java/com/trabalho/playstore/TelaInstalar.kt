@@ -24,9 +24,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.GetApp
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
@@ -39,6 +41,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -54,11 +57,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.trabalho.playstore.dao.AppDatabase
+import com.trabalho.playstore.dao.Avaliacao
 
+@Preview
 @Composable
-fun TelaInstalar(navController: NavHostController) {
+fun TelaInstalar(navController: NavHostController = rememberNavController()) {
+    var avaliacoes by remember { mutableStateOf<List<Avaliacao>>(emptyList()) }
+
+    val context = LocalContext.current
+    val db = AppDatabase.getDatabase(context)
+    val avaliacoesDao = db.avaliacoesDao()
+
+    LaunchedEffect(Unit) {
+        avaliacoes = avaliacoesDao.getAll()
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { BarraSuperior(navController) },
@@ -317,7 +335,68 @@ fun TelaInstalar(navController: NavHostController) {
                         ),
                     )
                 }
+                /*
+                LazyColumn {
+                    items(avaliacoes) { avaliacao ->
+                        ItemAvaliacao(
+                            nome = avaliacao.nome,
+                            nota = avaliacao.nota,
+                            comentario = avaliacao.comentario
+                        )
+                    }
+                }
+                */
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun ItemAvaliacao(nome: String = "teste", nota: Int = 3, comentario: String = "oi") {
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier
+                    .padding(end = 15.dp)
+                    .size(40.dp),
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = "",
+                tint = Color.DarkGray
+            )
+            Text(nome)
+            Spacer(modifier = Modifier.fillMaxWidth())
+            IconButton(
+                onClick = {},
+                modifier = Modifier
+                    .size(20.dp)
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    imageVector = Icons.Rounded.MoreVert,
+                    contentDescription = "",
+                )
+            }
+        }
+        Row {
+            for (i in 1..nota){
+                Icon(
+                    modifier = Modifier
+                        .size(20.dp),
+                    imageVector = Icons.Outlined.Star,
+                    contentDescription = "",
+                    tint = Color.Blue
+                )
+            }
+        }
+        Row{
+            Text(
+                text = comentario,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
