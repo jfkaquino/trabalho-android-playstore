@@ -1,5 +1,6 @@
 package com.trabalho.playstore
 
+import android.view.Menu
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,15 +17,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.ArrowDropDownCircle
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.LocalActivity
+import androidx.compose.material.icons.outlined.ManageAccounts
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Star
@@ -43,18 +49,42 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.trabalho.playstore.dao.AppDatabase
+import com.trabalho.playstore.dao.Conta
 
+@Preview
 @Composable
-fun TelaConta(navController: NavHostController) {
+fun TelaConta(navController: NavHostController = rememberNavController()) {
+    var contas by remember { mutableStateOf<List<Conta>>(emptyList()) }
+    var listaContasVisivel by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val db = AppDatabase.getDatabase(context)
+    val contasDao = db.contasDao()
+
+    LaunchedEffect(Unit) {
+        contas = contasDao.getAll()
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -106,10 +136,12 @@ fun TelaConta(navController: NavHostController) {
                         }
                         Spacer(modifier = Modifier.weight(1F))
                         IconButton(
-                            onClick = {}
+                            onClick = { listaContasVisivel = !listaContasVisivel }
                         ) {
                             Icon(
-                                modifier = Modifier.size(25.dp),
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .rotate(if (listaContasVisivel) 180f else 0f),
                                 imageVector = Icons.Outlined.ArrowDropDownCircle,
                                 contentDescription = "",
                                 tint = Color.DarkGray
@@ -137,6 +169,38 @@ fun TelaConta(navController: NavHostController) {
                         color = Color(0xFFF0F5F9),
                         thickness = 2.dp
                     )
+                    if (listaContasVisivel) {
+                    LazyColumn {
+                        items(contas){
+                            conta -> MenuItem(
+                                texto = conta.nome,
+                                icone = Icons.Outlined.AccountCircle
+                            )
+                        }
+                        item {
+                            MenuItem(
+                                texto = "Adicionar outra conta",
+                                icone = Icons.Outlined.PersonAdd,
+                                onClick = {}
+                            )
+                        }
+                        item {
+                            MenuItem(
+                                texto = "Gerenciar contas neste dispositivo",
+                                icone = Icons.Outlined.ManageAccounts,
+                                onClick = {}
+                            )
+                        }
+                        item {
+                            HorizontalDivider(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                color = Color(0xFFF0F5F9),
+                                thickness = 2.dp
+                            )
+                        }
+                    }
+                        }
                     Column {
                         MenuItem(
                             texto = "Gerenciar apps e dispositivos",
