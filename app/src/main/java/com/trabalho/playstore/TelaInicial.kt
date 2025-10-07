@@ -164,7 +164,7 @@ fun Inicial(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn(
-                    userScrollEnabled = false
+                    userScrollEnabled = true
                 ) {
                     items(listaApps) { app ->
 
