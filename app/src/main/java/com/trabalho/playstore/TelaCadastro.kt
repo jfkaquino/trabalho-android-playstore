@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -42,10 +43,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
 fun telaCadastro(){
+
+    var nome by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("")}
+    var senha by remember { mutableStateOf("") }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -69,7 +77,7 @@ fun telaCadastro(){
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    "Insira seu nome",
+                    "Insira seus dados",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodySmall,
@@ -78,15 +86,9 @@ fun telaCadastro(){
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                var login by remember { mutableStateOf("") }
-                val context = LocalContext.current
                 TextField(
-                    value = login,
-                    onValueChange = { login = it },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        Toast.makeText(context, "Login efetuado com sucesso!\n$login", Toast.LENGTH_LONG).show()
-                    }),
+                    value = email,
+                    onValueChange = { email = it },
                     label = { Text("E-mail ou telefone") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -107,12 +109,8 @@ fun telaCadastro(){
                 Spacer(modifier = Modifier.height(3.dp))
 
                 TextField(
-                    value = login,
-                    onValueChange = { login = it },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        Toast.makeText(context, "Login efetuado com sucesso!\n$login", Toast.LENGTH_LONG).show()
-                    }),
+                    value = nome,
+                    onValueChange = { nome = it },
                     label = { Text("Nome") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -133,12 +131,8 @@ fun telaCadastro(){
                 Spacer(modifier = Modifier.height(3.dp))
 
                 TextField(
-                    value = login,
-                    onValueChange = { login = it },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        Toast.makeText(context, "Login efetuado com sucesso!\n$login", Toast.LENGTH_LONG).show()
-                    }),
+                    value = senha,
+                    onValueChange = { senha = it },
                     label = { Text("Senha") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -155,6 +149,20 @@ fun telaCadastro(){
                         cursorColor = Color.DarkGray,
                     ),
                 )
+
+                Spacer(modifier = Modifier.height(3.dp))
+
+                Button(
+                    onClick = {
+                        if(nome.isNotBlank() && email.isNotBlank() && senha.isNotBlank()){
+                            CoroutineScope(Dispatchers.IO).launch {
+                                insertConta(nome, email, senha, contaDao)
+                            }
+                        }
+                    }
+                ) {
+                    Text("Avançar")
+                }
             }
         }
     }
