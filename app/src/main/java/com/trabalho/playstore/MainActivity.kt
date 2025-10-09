@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
                 composable("TelaConta") { TelaConta(navController) }
                 composable("TelaPlayPass") { TelaPlayPass(navController) }
                 composable("TelaCadastro") { TelaCadastro(navController) }
+                composable("TelaEditar") { TelaEditar(navController) }
             }
         }
     }
