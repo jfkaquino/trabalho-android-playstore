@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -85,13 +86,13 @@ fun TelaInstalar(navController: NavHostController = rememberNavController()) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp, vertical = 10.dp)
-                    .verticalScroll(rememberScrollState())
             ) {
                 Row {
                     Surface(
@@ -335,17 +336,9 @@ fun TelaInstalar(navController: NavHostController = rememberNavController()) {
                         ),
                     )
                 }
-                /*
-                LazyColumn {
-                    items(avaliacoes) { avaliacao ->
-                        ItemAvaliacao(
-                            nome = avaliacao.nome,
-                            nota = avaliacao.nota,
-                            comentario = avaliacao.comentario
-                        )
-                    }
-                }
-                */
+
+
+
             }
         }
     }

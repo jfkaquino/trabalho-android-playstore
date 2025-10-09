@@ -26,6 +26,7 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.ArrowDropDownCircle
 import androidx.compose.material.icons.outlined.CreditCard
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.LocalActivity
 import androidx.compose.material.icons.outlined.ManageAccounts
@@ -70,6 +71,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.trabalho.playstore.dao.AppDatabase
 import com.trabalho.playstore.dao.Conta
+import com.trabalho.playstore.dao.ContasDAO
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
@@ -172,9 +177,11 @@ fun TelaConta(navController: NavHostController = rememberNavController()) {
                     if (listaContasVisivel) {
                     LazyColumn {
                         items(contas){
-                            conta -> MenuItem(
+                            conta -> ContaItem(
                                 texto = conta.nome,
-                                icone = Icons.Outlined.AccountCircle
+                                icone = Icons.Outlined.AccountCircle,
+                                conta = conta,
+                                contasDAO = contasDao
                             )
                         }
                         item {
@@ -298,6 +305,45 @@ fun MenuItem(texto: String, icone: ImageVector, onClick: () -> Unit = {}) {
             text = texto,
             style = MaterialTheme.typography.bodyMedium
         )
+    }
+}
+
+@Composable
+fun ContaItem(texto: String, icone: ImageVector, conta: Conta, contasDAO: ContasDAO) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .clickable {
+
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            modifier = Modifier
+                .padding(start = 15.dp, end = 15.dp)
+                .size(20.dp),
+            imageVector = icone,
+            contentDescription = "",
+            tint = Color.DarkGray
+        )
+        Text(
+            text = texto,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        IconButton(
+            onClick = {
+                CoroutineScope(Dispatchers.IO).launch {
+                    contasDAO.delete(conta)
+                }
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Delete,
+                contentDescription = "Excluir"
+            )
+        }
     }
 }
 
