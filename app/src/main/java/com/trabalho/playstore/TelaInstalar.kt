@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -64,6 +65,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.trabalho.playstore.dao.AppDatabase
 import com.trabalho.playstore.dao.Avaliacao
+import com.trabalho.playstore.dao.insertAvaliacao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
@@ -87,12 +92,12 @@ fun TelaInstalar(navController: NavHostController = rememberNavController()) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp, vertical = 10.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Row {
                     Surface(
@@ -293,13 +298,13 @@ fun TelaInstalar(navController: NavHostController = rememberNavController()) {
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.DarkGray,
                     )
+                    var currentRating by remember { mutableIntStateOf(0) }
                     Row(
                         modifier = Modifier
                             .padding(vertical = 8.dp)
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        var currentRating by remember { mutableIntStateOf(0) }
                         for (starIndex in 1..5) {
                             NotaEstrela(
                                 starIndex = starIndex,
@@ -311,14 +316,9 @@ fun TelaInstalar(navController: NavHostController = rememberNavController()) {
                         }
                     }
                     var text by remember { mutableStateOf("") }
-                    val context = LocalContext.current
                     TextField(
                         value = text,
                         onValueChange = { text = it },
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(onDone = {
-                            Toast.makeText(context, "Obrigado pela resenha!\n$text", Toast.LENGTH_LONG).show()
-                        }),
                         label = { Text("Escreva uma resenha") },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -335,10 +335,42 @@ fun TelaInstalar(navController: NavHostController = rememberNavController()) {
                             cursorColor = Color.DarkGray,
                         ),
                     )
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        colors = ButtonColors(
+                            containerColor = Color.Blue,
+                            contentColor = Color.White,
+                            disabledContainerColor = Color.Gray,
+                            disabledContentColor = Color.Black
+                        ),
+                        onClick = {
+                            if(text.isNotBlank() && currentRating > 0){
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    insertAvaliacao(
+                                        nota = currentRating,
+                                        comentario = text,
+                                        avaliacaoDao = avaliacoesDao
+                                    )
+                                }
+                            }
+                        },
+                    ) {
+                        Text(
+                            "Postar",
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
 
-
-
+            }
+            LazyColumn {
+                    items(avaliacoes){
+                            avaliacao -> ItemAvaliacao(
+                        nota = avaliacao.nota,
+                        comentario = avaliacao.comentario
+                    )
+                }
             }
         }
     }

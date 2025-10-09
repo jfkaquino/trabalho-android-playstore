@@ -2,7 +2,7 @@ package com.trabalho.playstore.dao
 
 import android.util.Log
 
-private suspend fun getConta(contaDao: ContasDAO): List<Conta> {
+suspend fun getConta(contaDao: ContasDAO): List<Conta> {
     return try{
         contaDao.getAll()
     }catch(e: Exception){
@@ -11,7 +11,7 @@ private suspend fun getConta(contaDao: ContasDAO): List<Conta> {
     }
 }
 
-private suspend fun insertConta(nome: String, email: String, senha: String, contaDao: ContasDAO){
+suspend fun insertConta(nome: String, email: String, senha: String, contaDao: ContasDAO){
     try{
         contaDao.insert(Conta(nome = nome, email = email, senha = senha))
     }catch(e: Exception){
@@ -19,7 +19,7 @@ private suspend fun insertConta(nome: String, email: String, senha: String, cont
     }
 }
 
-private suspend fun deleteConta(conta: Conta, contaDao: ContasDAO){
+suspend fun deleteConta(conta: Conta, contaDao: ContasDAO){
     try{
         contaDao.delete(conta)
     }catch(e: Exception){
@@ -27,7 +27,7 @@ private suspend fun deleteConta(conta: Conta, contaDao: ContasDAO){
     }
 }
 
-private suspend fun updateConta(conta: Conta, contaDao: ContasDAO){
+suspend fun updateConta(conta: Conta, contaDao: ContasDAO){
     try{
         contaDao.update(conta)
     }catch(e: Exception){

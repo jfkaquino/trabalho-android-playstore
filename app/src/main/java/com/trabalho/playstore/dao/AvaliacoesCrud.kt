@@ -2,7 +2,7 @@ package com.trabalho.playstore.dao
 
 import android.util.Log
 
-private suspend fun getAvaliacao(avaliacaoDao: AvaliacoesDAO): List<Avaliacao> {
+suspend fun getAvaliacao(avaliacaoDao: AvaliacoesDAO): List<Avaliacao> {
     return try{
         avaliacaoDao.getAll()
     }catch(e: Exception){
@@ -11,15 +11,15 @@ private suspend fun getAvaliacao(avaliacaoDao: AvaliacoesDAO): List<Avaliacao> {
     }
 }
 
-private suspend fun insertAvaliacao(contaId: Int, nome: String, nota: Int, comentario: String, avaliacaoDao: AvaliacoesDAO){
+suspend fun insertAvaliacao(nota: Int, comentario: String, avaliacaoDao: AvaliacoesDAO){
     try{
-        avaliacaoDao.insert(Avaliacao(contaId = contaId, nome = nome, nota = nota, comentario = comentario))
+        avaliacaoDao.insert(Avaliacao(nota = nota, comentario = comentario))
     }catch(e: Exception){
         Log.e("Erro ao adicionar", "Msg: ${e.message}")
     }
 }
 
-private suspend fun deleteAvaliacao(avaliacao: Avaliacao, avaliacaoDao: AvaliacoesDAO){
+suspend fun deleteAvaliacao(avaliacao: Avaliacao, avaliacaoDao: AvaliacoesDAO){
     try{
         avaliacaoDao.delete(avaliacao)
     }catch(e: Exception){
@@ -27,7 +27,7 @@ private suspend fun deleteAvaliacao(avaliacao: Avaliacao, avaliacaoDao: Avaliaco
     }
 }
 
-private suspend fun updateAvaliacao(avaliacao: Avaliacao, avaliacaoDao: AvaliacoesDAO){
+suspend fun updateAvaliacao(avaliacao: Avaliacao, avaliacaoDao: AvaliacoesDAO){
     try{
         avaliacaoDao.update(avaliacao)
     }catch(e: Exception){
