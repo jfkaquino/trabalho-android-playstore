@@ -181,7 +181,9 @@ fun TelaConta(navController: NavHostController = rememberNavController()) {
                             MenuItem(
                                 texto = "Adicionar outra conta",
                                 icone = Icons.Outlined.PersonAdd,
-                                onClick = {}
+                                onClick = {
+                                    navController.navigate("TelaCadastro")
+                                }
                             )
                         }
                         item {

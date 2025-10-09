@@ -1,6 +1,7 @@
 package com.trabalho.playstore
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -43,17 +44,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.trabalho.playstore.dao.AppDatabase
+import com.trabalho.playstore.dao.Conta
+import com.trabalho.playstore.dao.ContasDAO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun telaCadastro(){
+fun TelaCadastro(navController: NavHostController = rememberNavController()){
 
     var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("")}
     var senha by remember { mutableStateOf("") }
+
+    val contex = LocalContext.current
+    val db = AppDatabase.getDatabase(contex)
+    val contaDao = db.contasDao()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -193,4 +202,12 @@ private fun BarraSuperiorCadastro() {
             )
         },
     )
+}
+
+suspend fun insertConta(nome: String, email: String, senha: String, contaDao: ContasDAO){
+    try{
+        contaDao.insert(Conta(nome = nome, email = email, senha = senha))
+    }catch(e: Exception){
+        Log.e("Erro ao adicionar", "Msg: ${e.message}")
+    }
 }
