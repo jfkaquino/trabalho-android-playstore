@@ -1,6 +1,7 @@
 package com.trabalho.playstore
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -94,7 +96,7 @@ fun TelaCadastro(navController: NavHostController = rememberNavController()){
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(70.dp)
-                        .padding(vertical = 8.dp)
+                        .padding(10.dp)
                         .border(2.dp, Color.LightGray, RoundedCornerShape(5.dp)),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
@@ -107,8 +109,6 @@ fun TelaCadastro(navController: NavHostController = rememberNavController()){
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(3.dp))
-
                 TextField(
                     value = nome,
                     onValueChange = { nome = it },
@@ -116,7 +116,7 @@ fun TelaCadastro(navController: NavHostController = rememberNavController()){
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(70.dp)
-                        .padding(vertical = 8.dp)
+                        .padding(10.dp)
                         .border(2.dp, Color.LightGray, RoundedCornerShape(5.dp)),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
@@ -138,7 +138,7 @@ fun TelaCadastro(navController: NavHostController = rememberNavController()){
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(70.dp)
-                        .padding(vertical = 8.dp)
+                        .padding(10.dp)
                         .border(2.dp, Color.LightGray, RoundedCornerShape(5.dp)),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
@@ -151,18 +151,27 @@ fun TelaCadastro(navController: NavHostController = rememberNavController()){
                     ),
                 )
 
-                Spacer(modifier = Modifier.height(3.dp))
-
                 Button(
+                    modifier = Modifier.padding(10.dp),
+                    colors = ButtonColors(
+                        containerColor = Color.Blue,
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.Gray,
+                        disabledContentColor = Color.Black
+                    ),
                     onClick = {
                         if(nome.isNotBlank() && email.isNotBlank() && senha.isNotBlank()){
                             CoroutineScope(Dispatchers.IO).launch {
                                 insertConta(nome, email, senha, contaDao)
                             }
                         }
+
+
+                        Toast.makeText(contex, "Conta cadastrada com sucesso!", Toast.LENGTH_SHORT).show()
+                        navController.navigate("TelaConta")
                     }
                 ) {
-                    Text("Avançar")
+                    Text("Cadastrar")
                 }
             }
         }

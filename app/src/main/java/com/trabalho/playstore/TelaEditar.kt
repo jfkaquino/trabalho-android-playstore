@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,10 +56,8 @@ import com.trabalho.playstore.dao.ContasDAO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-@Preview
 @Composable
-fun TelaEditar(navController: NavHostController = rememberNavController()){
+fun TelaEditar(id: Int?, navController: NavHostController){
 
     var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("")}
@@ -67,6 +66,17 @@ fun TelaEditar(navController: NavHostController = rememberNavController()){
     val contex = LocalContext.current
     val db = AppDatabase.getDatabase(contex)
     val contaDao = db.contasDao()
+
+    LaunchedEffect(id) {
+        if (id != null) {
+            val conta = contaDao.getContaById(id)
+            if (conta != null) {
+                nome = conta.nome
+                email = conta.email
+                senha = conta.senha
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -108,8 +118,6 @@ fun TelaEditar(navController: NavHostController = rememberNavController()){
                         cursorColor = Color.DarkGray,
                     ),
                 )
-
-                //Spacer(modifier = Modifier.height(3.dp))
 
                 TextField(
                     value = nome,
@@ -159,7 +167,20 @@ fun TelaEditar(navController: NavHostController = rememberNavController()){
                         disabledContainerColor = Color.Gray,
                         disabledContentColor = Color.Black
                     ),
-                    onClick = { }
+                    onClick = {
+                        if (id != null) {
+                            val contaAtualizada = Conta(id = id, nome = nome, email = email, senha = senha)
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                contaDao.update(contaAtualizada)
+                            }
+
+                            Toast.makeText(contex, "Conta atualizada com sucesso!", Toast.LENGTH_SHORT).show()
+                            navController.navigate("TelaConta")
+                        } else {
+                            Toast.makeText(contex, "Erro: ID inválido.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 ) {
                     Text("Confirmar")
                 }

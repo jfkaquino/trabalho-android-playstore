@@ -1,6 +1,7 @@
 package com.trabalho.playstore
 
 import android.view.Menu
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +23,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.ArrowDropDownCircle
@@ -181,7 +183,8 @@ fun TelaConta(navController: NavHostController = rememberNavController()) {
                                 texto = conta.nome,
                                 icone = Icons.Outlined.AccountCircle,
                                 conta = conta,
-                                contasDAO = contasDao
+                                contasDAO = contasDao,
+                                navController = navController
                             )
                         }
                         item {
@@ -309,7 +312,10 @@ fun MenuItem(texto: String, icone: ImageVector, onClick: () -> Unit = {}) {
 }
 
 @Composable
-fun ContaItem(texto: String, icone: ImageVector, conta: Conta, contasDAO: ContasDAO) {
+fun ContaItem(texto: String, icone: ImageVector, conta: Conta, contasDAO: ContasDAO, navController: NavHostController) {
+
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -334,9 +340,22 @@ fun ContaItem(texto: String, icone: ImageVector, conta: Conta, contasDAO: Contas
         Spacer(modifier = Modifier.weight(1f))
         IconButton(
             onClick = {
+                navController.navigate("TelaEditar/${conta.id}")
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Create,
+                contentDescription = "Editar"
+            )
+        }
+        IconButton(
+            onClick = {
                 CoroutineScope(Dispatchers.IO).launch {
                     contasDAO.delete(conta)
                 }
+
+                Toast.makeText(context, "Conta apagada!", Toast.LENGTH_SHORT).show()
+                navController.navigate("TelaInicial")
             }
         ) {
             Icon(

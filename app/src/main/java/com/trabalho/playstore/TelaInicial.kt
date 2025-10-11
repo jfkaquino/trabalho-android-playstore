@@ -48,7 +48,7 @@ import androidx.navigation.NavHostController
 data class AppItem(val nome: String, val descricao: String, val avaliacao: String, val tamanho: String, val cor: Color, val imageResId: Int, val nomeOferta: String, val rotaNavegacao: String? = null)
 
 @Composable
-fun Inicial(navController: NavHostController) {
+fun TelaInicial(navController: NavHostController) {
 
     val listaApps = listOf(
         AppItem(

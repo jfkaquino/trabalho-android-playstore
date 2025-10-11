@@ -16,12 +16,15 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             NavHost(navController = navController, startDestination = "TelaInicial") {
-                composable("TelaInicial") { Inicial(navController) }
+                composable("TelaInicial") { TelaInicial(navController) }
                 composable("TelaInstalar") { TelaInstalar(navController) }
                 composable("TelaConta") { TelaConta(navController) }
                 composable("TelaPlayPass") { TelaPlayPass(navController) }
                 composable("TelaCadastro") { TelaCadastro(navController) }
-                composable("TelaEditar") { TelaEditar(navController) }
+                composable("TelaEditar/{id}") { backStackEntry ->
+                    val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
+                    TelaEditar(navController = navController, id = id)
+                }
             }
         }
     }
