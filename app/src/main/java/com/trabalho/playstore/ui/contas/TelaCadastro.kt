@@ -37,21 +37,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.trabalho.playstore.R
 import com.trabalho.playstore.data.local.AppDatabase
 import com.trabalho.playstore.data.local.Conta
 import com.trabalho.playstore.data.local.ContasDAO
+import com.trabalho.playstore.data.repository.AvaliacoesRepository
+import com.trabalho.playstore.data.repository.ContasRepository
+import com.trabalho.playstore.ui.avaliacoes.AvaliacoesViewModel
+import com.trabalho.playstore.ui.avaliacoes.AvaliacoesViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun TelaCadastro(navController: NavHostController = rememberNavController()){
+fun TelaCadastro(
+    navController: NavHostController = rememberNavController(),
+    viewModel: ContasViewMode = viewModel(
+        factory = ContasViewModelFactory(
+            ContasRepository(
+                AppDatabase.getDatabase(
+                    LocalContext.current
+                ).contasDao()
+            )
+        )
+    )
+){
 
-    var nome by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    //var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("")}
     var senha by remember { mutableStateOf("") }
 
@@ -111,8 +130,8 @@ fun TelaCadastro(navController: NavHostController = rememberNavController()){
                 )
 
                 TextField(
-                    value = nome,
-                    onValueChange = { nome = it },
+                    value = uiState.nome,
+                    onValueChange = { viewModel.onNameChange(it) },
                     label = { Text("Nome") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -161,9 +180,9 @@ fun TelaCadastro(navController: NavHostController = rememberNavController()){
                         disabledContentColor = Color.Black
                     ),
                     onClick = {
-                        if(nome.isNotBlank() && email.isNotBlank() && senha.isNotBlank()){
+                        if(uiState.nome.isNotBlank() && uiState.email.isNotBlank() && uiState.senha.isNotBlank()){
                             CoroutineScope(Dispatchers.IO).launch {
-                                insertConta(nome, email, senha, contaDao)
+
                             }
                         }
 
