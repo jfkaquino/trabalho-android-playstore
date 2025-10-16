@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AvaliacoesDAO{
@@ -13,7 +14,7 @@ interface AvaliacoesDAO{
     suspend fun insert(avaliacao: Avaliacao)
 
     @Query("SELECT * FROM avaliacoes")
-    suspend fun getAll() : List<Avaliacao>
+    fun getAll() : Flow<List<Avaliacao>>
 
     @Delete
     suspend fun delete(avaliacao: Avaliacao)

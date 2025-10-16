@@ -3,7 +3,7 @@ package com.trabalho.playstore.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "com/trabalho/playstore/ui/contas")
+@Entity(tableName = "contas")
 data class Conta(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -12,7 +12,7 @@ data class Conta(
     val senha: String
 )
 
-@Entity(tableName = "com/trabalho/playstore/ui/avaliacoes")
+@Entity(tableName = "avaliacoes")
 data class Avaliacao(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

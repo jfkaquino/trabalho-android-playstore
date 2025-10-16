@@ -58,6 +58,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.trabalho.playstore.BarraInferior
@@ -65,48 +67,26 @@ import com.trabalho.playstore.BarraSuperior
 import com.trabalho.playstore.R
 import com.trabalho.playstore.data.local.AppDatabase
 import com.trabalho.playstore.data.local.Avaliacao
+import com.trabalho.playstore.data.repository.AvaliacoesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Preview
 @Composable
-fun TelaInstalar(navController: NavHostController = rememberNavController()) {
-    var avaliacoes by remember { mutableStateOf<List<Avaliacao>>(emptyList()) }
-    var avaliacaoEmEdicao by remember { mutableStateOf<Avaliacao?>(null) }
-    var currentRating by remember { mutableIntStateOf(0) }
-    var text by remember { mutableStateOf("") }
-
-    val context = LocalContext.current
-    val db = AppDatabase.getDatabase(context)
-    val avaliacaoDao = db.avaliacoesDao()
-    val scope = rememberCoroutineScope()
-
-    fun refreshAvaliacoes() {
-        scope.launch(Dispatchers.IO) {
-            val updatedList = avaliacaoDao.getAll()
-            withContext(Dispatchers.Main) {
-                avaliacoes = updatedList
-            }
-        }
-    }
-
-    fun clearForm() {
-        text = ""
-        currentRating = 0
-        avaliacaoEmEdicao = null
-    }
-
-    LaunchedEffect(Unit) {
-        refreshAvaliacoes()
-    }
-
-    LaunchedEffect(avaliacaoEmEdicao) {
-        avaliacaoEmEdicao?.let {
-            currentRating = it.nota
-            text = it.comentario
-        }
-    }
+fun TelaInstalar(
+    navController: NavHostController = rememberNavController(),
+    viewModel: AvaliacoesViewModel = viewModel(
+        factory = AvaliacoesViewModelFactory(
+            AvaliacoesRepository(
+                AppDatabase.getDatabase(
+                    LocalContext.current
+                ).avaliacoesDao()
+            )
+        )
+    )
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -307,16 +287,16 @@ fun TelaInstalar(navController: NavHostController = rememberNavController()) {
                                 for (starIndex in 1..5) {
                                     NotaEstrela(
                                         starIndex = starIndex,
-                                        currentRating = currentRating,
+                                        currentRating = uiState.nota,
                                         onStarClicked = { clickedStarIndex ->
-                                            currentRating = clickedStarIndex
+                                            viewModel.onNotaChange(clickedStarIndex)
                                         }
                                     )
                                 }
                             }
                             TextField(
-                                value = text,
-                                onValueChange = { text = it },
+                                value = uiState.comentario,
+                                onValueChange = { viewModel.onComentarioChange(it) },
                                 label = { Text("Escreva uma resenha") },
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -341,57 +321,21 @@ fun TelaInstalar(navController: NavHostController = rememberNavController()) {
                                     disabledContainerColor = Color.Gray,
                                     disabledContentColor = Color.Black
                                 ),
-                                onClick = {
-                                    val avaliacaoAtual = avaliacaoEmEdicao
-
-                                    if (text.isNotBlank() && currentRating > 0) {
-                                        scope.launch(Dispatchers.IO) {
-                                            if (avaliacaoAtual == null) {
-                                                val novaAvaliacao =
-                                                    Avaliacao(
-                                                        nota = currentRating,
-                                                        comentario = text
-                                                    )
-                                                avaliacaoDao.insert(novaAvaliacao)
-                                            } else {
-                                                val avaliacaoAtualizada = avaliacaoAtual.copy(
-                                                    nota = currentRating,
-                                                    comentario = text
-                                                )
-                                                avaliacaoDao.update(avaliacaoAtualizada)
-                                            }
-                                            refreshAvaliacoes()
-                                            withContext(Dispatchers.Main) {
-                                                clearForm()
-                                            }
-                                        }
-                                    } else {
-                                        Toast.makeText(
-                                            context,
-                                            "Por favor, adicione uma nota e um comentário.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                },
+                                onClick = { viewModel.onSalvar() },
                             ) {
                                 Text(
-                                    if (avaliacaoEmEdicao == null) "Postar" else "Atualizar",
+                                    text = uiState.textoBotao,
                                     style = MaterialTheme.typography.labelLarge
                                 )
                             }
                         }
                     }
             }
-            items(avaliacoes, key = { it.id }) { avaliacao ->
+            items(uiState.listaAvaliacoes,) { avaliacao ->
                 ItemAvaliacao(
                     avaliacao = avaliacao,
-                    onEdit = { avaliacaoEmEdicao = it },
-                    onDelete = {
-                        scope.launch(Dispatchers.IO) {
-                            avaliacaoDao.delete(it)
-                            refreshAvaliacoes()
-                        }
-                    }
+                    onEdit = { viewModel.onEditar(avaliacao) },
+                    onDelete = { viewModel.onDeletar(avaliacao) }
                 )
             }
         }
