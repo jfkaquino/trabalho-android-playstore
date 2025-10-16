@@ -1,4 +1,4 @@
-package com.trabalho.playstore.dao
+package com.trabalho.playstore.data.local
 
 import android.content.Context
 import androidx.room.Database

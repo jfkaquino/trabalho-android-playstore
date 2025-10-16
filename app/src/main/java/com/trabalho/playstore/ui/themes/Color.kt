@@ -1,4 +1,4 @@
-package com.trabalho.playstore.ui.theme
+package com.trabalho.playstore.ui.themes
 
 import androidx.compose.ui.graphics.Color
 

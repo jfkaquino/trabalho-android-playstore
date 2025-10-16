@@ -1,6 +1,5 @@
-package com.trabalho.playstore
+package com.trabalho.playstore.ui.contas
 
-import android.view.Menu
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -67,13 +66,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.trabalho.playstore.dao.AppDatabase
-import com.trabalho.playstore.dao.Conta
-import com.trabalho.playstore.dao.ContasDAO
+import com.trabalho.playstore.R
+import com.trabalho.playstore.data.local.AppDatabase
+import com.trabalho.playstore.data.local.Conta
+import com.trabalho.playstore.data.local.ContasDAO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

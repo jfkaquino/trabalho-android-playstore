@@ -7,6 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.trabalho.playstore.ui.avaliacoes.TelaInstalar
+import com.trabalho.playstore.ui.contas.TelaCadastro
+import com.trabalho.playstore.ui.contas.TelaConta
+import com.trabalho.playstore.ui.contas.TelaEditar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

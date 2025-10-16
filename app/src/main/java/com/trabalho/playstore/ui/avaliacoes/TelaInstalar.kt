@@ -1,8 +1,7 @@
-package com.trabalho.playstore
+package com.trabalho.playstore.ui.avaliacoes
 
 import android.widget.Toast
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.core.copy
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,9 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.filled.AccountCircle
@@ -63,8 +60,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.trabalho.playstore.dao.AppDatabase
-import com.trabalho.playstore.dao.Avaliacao
+import com.trabalho.playstore.BarraInferior
+import com.trabalho.playstore.BarraSuperior
+import com.trabalho.playstore.R
+import com.trabalho.playstore.data.local.AppDatabase
+import com.trabalho.playstore.data.local.Avaliacao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
