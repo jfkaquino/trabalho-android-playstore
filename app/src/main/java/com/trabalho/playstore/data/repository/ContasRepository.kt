@@ -1,41 +1,25 @@
 package com.trabalho.playstore.data.repository
 
-import android.util.Log
 import com.trabalho.playstore.data.local.Conta
 import com.trabalho.playstore.data.local.ContasDAO
+import kotlinx.coroutines.flow.Flow
 
-class ContasRepository(private val contasDAO: ContasDAO) {
+class ContasRepository (private val contasDAO: ContasDAO){
 
-    suspend fun getConta(contaDao: ContasDAO): List<Conta> {
-        return try {
-            contaDao.getAll()
-        } catch (e: Exception) {
-            Log.e("Erro ao buscar", "${e.message}")
-            emptyList()
-        }
+    suspend fun getAll(): Flow<List<Conta>>{
+        return contasDAO.getAll()
     }
 
-    suspend fun insertConta(nome: String, email: String, senha: String, contaDao: ContasDAO) {
-        try {
-            contaDao.insert(Conta(nome = nome, email = email, senha = senha))
-        } catch (e: Exception) {
-            Log.e("Erro ao adicionar", "Msg: ${e.message}")
-        }
+    suspend fun insert(conta: Conta){
+        contasDAO.insert(conta)
     }
 
-    suspend fun deleteConta(conta: Conta, contaDao: ContasDAO) {
-        try {
-            contaDao.delete(conta)
-        } catch (e: Exception) {
-            Log.e("Erro ao excluir", "Msg: ${e.message}")
-        }
+    suspend fun update(conta: Conta){
+        contasDAO.update(conta)
     }
 
-    suspend fun updateConta(conta: Conta, contaDao: ContasDAO) {
-        try {
-            contaDao.update(conta)
-        } catch (e: Exception) {
-            Log.e("Erro ao editar", "Msg: ${e.message}")
-        }
+    suspend fun delete(conta: Conta){
+        contasDAO.delete(conta)
     }
+
 }

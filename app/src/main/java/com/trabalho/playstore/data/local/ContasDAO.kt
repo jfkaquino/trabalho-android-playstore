@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ContasDAO{
@@ -13,7 +14,7 @@ interface ContasDAO{
     suspend fun insert(conta: Conta)
 
     @Query("SELECT * FROM contas")
-    suspend fun getAll() : List<Conta>
+    suspend fun getAll() : Flow<List<Conta>>
 
     @Query("SELECT * FROM contas WHERE id = :id LIMIT 1")
     suspend fun getContaById(id: Int): Conta?
