@@ -14,7 +14,7 @@ interface ContasDAO{
     suspend fun insert(conta: Conta)
 
     @Query("SELECT * FROM contas")
-    suspend fun getAll() : Flow<List<Conta>>
+    fun getAll() : Flow<List<Conta>>
 
     @Query("SELECT * FROM contas WHERE id = :id LIMIT 1")
     suspend fun getContaById(id: Int): Conta?

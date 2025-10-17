@@ -67,29 +67,38 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.trabalho.playstore.R
 import com.trabalho.playstore.data.local.AppDatabase
 import com.trabalho.playstore.data.local.Conta
 import com.trabalho.playstore.data.local.ContasDAO
+import com.trabalho.playstore.data.repository.ContasRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun TelaConta(navController: NavHostController = rememberNavController()) {
-    var contas by remember { mutableStateOf<List<Conta>>(emptyList()) }
+fun TelaConta(navController: NavHostController = rememberNavController(),
+              viewModel: ContasViewModel = viewModel(
+                  factory = ContasViewModelFactory(
+                      ContasRepository(
+                          AppDatabase.getDatabase(
+                              LocalContext.current
+                          ).contasDao()
+                      )
+                  )
+              )
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     var listaContasVisivel by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val db = AppDatabase.getDatabase(context)
-    val contasDao = db.contasDao()
-
-    LaunchedEffect(Unit) {
-        contas = contasDao.getAll()
-    }
 
     Scaffold(
         modifier = Modifier
@@ -177,13 +186,13 @@ fun TelaConta(navController: NavHostController = rememberNavController()) {
                     )
                     if (listaContasVisivel) {
                     LazyColumn {
-                        items(contas){
+                        items(uiState.contas){
                             conta -> ContaItem(
-                                texto = conta.nome,
-                                icone = Icons.Outlined.AccountCircle,
-                                conta = conta,
-                                contasDAO = contasDao,
-                                navController = navController
+                            texto = conta.nome,
+                            icone = Icons.Outlined.AccountCircle,
+                            conta = conta,
+                            navController = navController,
+                            viewModel = viewModel
                             )
                         }
                         item {
@@ -311,7 +320,7 @@ fun MenuItem(texto: String, icone: ImageVector, onClick: () -> Unit = {}) {
 }
 
 @Composable
-fun ContaItem(texto: String, icone: ImageVector, conta: Conta, contasDAO: ContasDAO, navController: NavHostController) {
+fun ContaItem(texto: String, icone: ImageVector, conta: Conta, navController: NavHostController, viewModel: ContasViewModel) {
 
     val context = LocalContext.current
 
@@ -339,7 +348,7 @@ fun ContaItem(texto: String, icone: ImageVector, conta: Conta, contasDAO: Contas
         Spacer(modifier = Modifier.weight(1f))
         IconButton(
             onClick = {
-                navController.navigate("TelaEditar/${conta.id}")
+                navController.navigate("TelaCadastro/${conta.id}")
             }
         ) {
             Icon(
@@ -349,10 +358,7 @@ fun ContaItem(texto: String, icone: ImageVector, conta: Conta, contasDAO: Contas
         }
         IconButton(
             onClick = {
-                CoroutineScope(Dispatchers.IO).launch {
-                    contasDAO.delete(conta)
-                }
-
+                viewModel.onDelete(conta)
                 Toast.makeText(context, "Conta apagada!", Toast.LENGTH_SHORT).show()
                 navController.navigate("TelaInicial")
             }

@@ -10,7 +10,6 @@ import androidx.navigation.compose.rememberNavController
 import com.trabalho.playstore.ui.avaliacoes.TelaInstalar
 import com.trabalho.playstore.ui.contas.TelaCadastro
 import com.trabalho.playstore.ui.contas.TelaConta
-import com.trabalho.playstore.ui.contas.TelaEditar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,10 +23,10 @@ class MainActivity : ComponentActivity() {
                 composable("TelaInstalar") { TelaInstalar(navController) }
                 composable("TelaConta") { TelaConta(navController) }
                 composable("TelaPlayPass") { TelaPlayPass(navController) }
-                composable("TelaCadastro") { TelaCadastro(navController) }
-                composable("TelaEditar/{id}") { backStackEntry ->
+                composable("TelaCadastro") { TelaCadastro(navController = navController, id = null) }
+                composable("TelaCadastro/{id}") { backStackEntry ->
                     val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
-                    TelaEditar(navController = navController, id = id)
+                    TelaCadastro(navController = navController, id = id)
                 }
             }
         }

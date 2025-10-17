@@ -3,7 +3,6 @@ package com.trabalho.playstore.ui.contas
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.trabalho.playstore.data.local.Avaliacao
 import com.trabalho.playstore.data.local.Conta
 import com.trabalho.playstore.data.repository.ContasRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class ContasUIState(
-    val ListadeContas: List<Conta> = emptyList(),
+    val contas: List<Conta> = emptyList(),
     val nome: String = "",
     val email: String = "",
     val senha: String = "",
@@ -23,24 +22,19 @@ data class ContasUIState(
         get() = if (contaEmEdicao == null) "Cadastrar" else "Salvar"
 }
 
-class ContasViewMode(private val repository: ContasRepository) : ViewModel() {
+class ContasViewModel(private val repository: ContasRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ContasUIState())
-
     val uiState: StateFlow<ContasUIState> = _uiState.asStateFlow()
 
     init {
-
         viewModelScope.launch {
-            repository.getAll().collect{
-                    contas ->
-                _uiState.update {
-                        currentState ->
-                    currentState.copy( ListadeContas = contas )
+            repository.getAll().collect { contasList ->
+                _uiState.update { current ->
+                    current.copy(contas = contasList)
                 }
             }
         }
-
     }
 
     fun onNameChange(novoNome: String) {
@@ -61,8 +55,18 @@ class ContasViewMode(private val repository: ContasRepository) : ViewModel() {
         }
     }
 
-    fun onSalvar() {
+    fun ContaEmEdicao(conta: Conta?) {
+        _uiState.update {
+            it.copy(
+                contaEmEdicao = conta,
+                nome = conta?.nome ?: "",
+                email = conta?.email ?: "",
+                senha = conta?.senha ?: ""
+            )
+        }
+    }
 
+    fun onSalvar() {
         val state = _uiState.value
 
         if (state.nome.isBlank() && state.email.isBlank() && state.senha.isBlank()) return
@@ -78,7 +82,6 @@ class ContasViewMode(private val repository: ContasRepository) : ViewModel() {
         )
 
         viewModelScope.launch {
-
             if (state.contaEmEdicao == null) {
                 repository.insert(contaParaSalvar)
             } else {
@@ -89,7 +92,7 @@ class ContasViewMode(private val repository: ContasRepository) : ViewModel() {
         limparCampos()
     }
 
-    private fun limparCampos(){
+    private fun limparCampos() {
         _uiState.update {
             it.copy(
                 nome = "",
@@ -101,15 +104,12 @@ class ContasViewMode(private val repository: ContasRepository) : ViewModel() {
     }
 }
 
-class ContasViewModelFactory(private val repository: ContasRepository) : ViewModelProvider.Factory{
+class ContasViewModelFactory(private val repository: ContasRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ContasViewMode::class.java)) {
+        if (modelClass.isAssignableFrom(ContasViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ContasViewMode(repository) as T
+            return ContasViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-
-
-

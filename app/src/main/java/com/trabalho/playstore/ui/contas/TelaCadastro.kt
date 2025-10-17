@@ -1,5 +1,6 @@
 package com.trabalho.playstore.ui.contas
 
+import android.R.attr.id
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,13 +54,15 @@ import com.trabalho.playstore.ui.avaliacoes.AvaliacoesViewModel
 import com.trabalho.playstore.ui.avaliacoes.AvaliacoesViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @Preview
 @Composable
 fun TelaCadastro(
     navController: NavHostController = rememberNavController(),
-    viewModel: ContasViewMode = viewModel(
+    id: Int? = null,
+    viewModel: ContasViewModel = viewModel(
         factory = ContasViewModelFactory(
             ContasRepository(
                 AppDatabase.getDatabase(
@@ -70,13 +74,20 @@ fun TelaCadastro(
 ){
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    //var nome by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("")}
-    var senha by remember { mutableStateOf("") }
-
-    val contex = LocalContext.current
-    val db = AppDatabase.getDatabase(contex)
+    val context = LocalContext.current
+    val db = AppDatabase.getDatabase(context)
     val contaDao = db.contasDao()
+
+    LaunchedEffect(id) {
+        if (id != null) {
+            val conta = contaDao.getContaById(id)
+            if (conta != null) {
+                viewModel.ContaEmEdicao(conta)
+            }
+        } else {
+            viewModel.ContaEmEdicao(null)
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -90,7 +101,7 @@ fun TelaCadastro(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Criar uma conta do Google",
+                    text = "Criar ou editar uma conta do Google",
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
@@ -110,8 +121,8 @@ fun TelaCadastro(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 TextField(
-                    value = email,
-                    onValueChange = { email = it },
+                    value = uiState.email,
+                    onValueChange = { viewModel.onEmailChange(it) },
                     label = { Text("E-mail ou telefone") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -152,8 +163,8 @@ fun TelaCadastro(
                 Spacer(modifier = Modifier.height(3.dp))
 
                 TextField(
-                    value = senha,
-                    onValueChange = { senha = it },
+                    value = uiState.senha,
+                    onValueChange = { viewModel.onSenhaChange(it) },
                     label = { Text("Senha") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -181,17 +192,16 @@ fun TelaCadastro(
                     ),
                     onClick = {
                         if(uiState.nome.isNotBlank() && uiState.email.isNotBlank() && uiState.senha.isNotBlank()){
-                            CoroutineScope(Dispatchers.IO).launch {
-
-                            }
+                            viewModel.onSalvar()
+                            val mensagem = if (uiState.contaEmEdicao == null) "Conta cadastrada com sucesso!" else "Conta atualizada com sucesso!"
+                            Toast.makeText(context, mensagem, Toast.LENGTH_SHORT).show()
+                            navController.navigate("TelaConta")
+                        }else{
+                            Toast.makeText(context, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
                         }
-
-
-                        Toast.makeText(contex, "Conta cadastrada com sucesso!", Toast.LENGTH_SHORT).show()
-                        navController.navigate("TelaConta")
                     }
                 ) {
-                    Text("Cadastrar")
+                    Text(uiState.textoBotao)
                 }
             }
         }
@@ -223,12 +233,4 @@ private fun BarraSuperiorCadastro() {
             )
         },
     )
-}
-
-suspend fun insertConta(nome: String, email: String, senha: String, contaDao: ContasDAO){
-    try{
-        contaDao.insert(Conta(nome = nome, email = email, senha = senha))
-    }catch(e: Exception){
-        Log.e("Erro ao adicionar", "Msg: ${e.message}")
-    }
 }
